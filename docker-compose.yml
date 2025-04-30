@@ -1,0 +1,32 @@
+version: '2'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper:3.4.6
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    expose:
+      - "9093"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
+      KAFKA_LISTENER_NAMES: INSIDE
+      KAFKA_LISTENER_ORIGINS: INSIDE
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092
+      KAFKA_LISTENER_PORT: 9093
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+  bet-settlement-service:
+    image: bookmaker/bet-settlement-service
+    container_name: bet-settlement
+    depends_on:
+      - kafka
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_PORT=9093
