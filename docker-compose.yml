@@ -1,32 +1,28 @@
-version: '2'
+
 services:
-  zookeeper:
-    image: wurstmeister/zookeeper:3.4.6
-    ports:
-      - "2181:2181"
   kafka:
-    image: wurstmeister/kafka:latest
-    depends_on:
-      - zookeeper
+    image: bitnami/kafka:latest
+    container_name: kafka
+    environment:
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_KRAFT_CLUSTER_ID=kraft-cluster-12345
     ports:
       - "9092:9092"
-    expose:
-      - "9093"
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: INSIDE:9093
-      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
-      KAFKA_LISTENER_NAMES: INSIDE
-      KAFKA_LISTENER_ORIGINS: INSIDE
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092
-      KAFKA_LISTENER_PORT: 9093
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 
   bet-settlement-service:
     image: bookmaker/bet-settlement-service
-    container_name: bet-settlement
+    container_name: bet-settlement-service
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     depends_on:
       - kafka
     ports:
       - "8080:8080"
-    environment:
-      - KAFKA_PORT=9093
+

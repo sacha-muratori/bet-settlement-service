@@ -16,6 +16,9 @@ public class KafkaEventProducer {
     private static final String TOPIC = "event-outcomes";
 
     public void sendEventOutcome(EventOutcome eventOutcome) {
+
+        System.out.println("Event sent!!!!!!");
+
         kafkaTemplate.send(TOPIC, eventOutcome);
     }
 }

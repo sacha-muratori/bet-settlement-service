@@ -1,4 +1,4 @@
-# bet-settlement-service
+# Bet Settlement Service
 A backend service simulating a sports event outcome handling and bet settlement via Kafka and RocketMQ
 
 ## Installation
@@ -11,12 +11,12 @@ The installation is quite easy.
 
 You can move into the Dockerfile path within the application repository and build the Bet Settlement Service image:
 ```bash
-docker build -t bookmaker/bet-settlement-service
+docker build -t bookmaker/bet-settlement-service .
 ```
 
 Lastly, just run the docker compose command (provided you are in the same folder path as above):
 ```bash
-docker-compose up
+docker compose up
 ```
 
 And that's it!
