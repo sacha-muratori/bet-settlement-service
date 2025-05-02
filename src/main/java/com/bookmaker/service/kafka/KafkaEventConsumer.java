@@ -3,6 +3,8 @@ package com.bookmaker.service.kafka;
 import com.bookmaker.model.EventOutcome;
 import com.bookmaker.repository.BetRepository;
 import com.bookmaker.model.Bet;
+import com.bookmaker.service.rocketmq.RocketMqSettlementProducer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,21 +17,36 @@ public class KafkaEventConsumer {
     @Autowired
     private BetRepository betRepository;
 
-    @KafkaListener(topics = "event-outcomes", groupId = "dev_group")
+    @Autowired
+    private RocketMqSettlementProducer rocketMqSettlementProducer;
+
+    @KafkaListener(topics = "${spring.kafka.topic}", groupId = "${spring.kafka.consumer.group-id}")
     public void consume(EventOutcome eventOutcome) {
 
-        System.out.println("Event received!!!!!!");
+        System.out.println("Event received!!!!!! id = " + eventOutcome.getEventId());
 
-        //TODO work on h2 in-memory db and rocket mq
-//        // Logic to match event outcomes with bets in the database
-//        List<Bet> betsToSettle = betRepository.findByEventId(eventOutcome.getEventId());
-//
-//        for (Bet bet : betsToSettle) {
-//            if (bet.getEventWinnerId().equals(eventOutcome.getEventWinnerId())) {
-//                // Send bet settlement to RocketMQ (mocked here)
-//                // In real setup, you'd use RocketMQProducer here
-//                System.out.println("Bet settled for Bet ID: " + bet.getBetId());
-//            }
-//        }
+        List<Bet> betsToSettle = betRepository.findAll();
+        if (betsToSettle.isEmpty()) {
+            System.out.println("No bets to settle for event: " + eventOutcome.getEventId());
+        }
+        for (Bet bet : betsToSettle) {
+            System.out.println("Bet to Settle: id = " + bet.getId() + " event id = " + bet.getEventId());
+        }
+
+        betsToSettle = betRepository.findByEventId(eventOutcome.getEventId());
+        for (Bet bet : betsToSettle) {
+            System.out.println("Bet to Settle: " + bet.getId());
+
+            if (bet.getEventId().equals(eventOutcome.getEventId())) {
+
+                System.out.println("Before rocketMQSettlementProducer: " + bet.getEventId());
+
+                // Send bet settlement to RocketMQ - Real
+                rocketMqSettlementProducer.send(bet);
+
+                // Send bet settlement to RocketMQ - Mock
+//                rocketMqSettlementProducer.sendSettlementMessage(bet);
+            }
+        }
     }
 }

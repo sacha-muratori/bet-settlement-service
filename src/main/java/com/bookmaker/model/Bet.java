@@ -1,7 +1,7 @@
 package com.bookmaker.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +11,7 @@ import lombok.Setter;
 public class Bet {
 
     @Id
-    private Long betId;
+    private Long id;
     private Long userId;
     private Long eventId;
     private Long eventMarketId;

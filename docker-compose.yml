@@ -1,4 +1,3 @@
-
 services:
   kafka:
     image: bitnami/kafka:latest
@@ -16,13 +15,47 @@ services:
     ports:
       - "9092:9092"
 
+  rocketmq-namesrv:
+    image: apache/rocketmq:5.1.3
+    container_name: rocketmq-namesrv
+    command: sh mqnamesrv
+    ports:
+      - "9876:9876"
+
+  rocketmq-broker:
+    image: apache/rocketmq:5.1.3
+    container_name: rocketmq-broker
+    depends_on:
+      - rocketmq-namesrv
+    environment:
+      - JAVA_OPT_EXT=-Duser.home=/home/rocketmq
+    command: >
+      sh -c "mkdir -p /home/rocketmq/conf &&
+      printf '%s\n' '
+        brokerClusterName=DefaultCluster
+        brokerName=broker-a
+        brokerId=0
+        listenPort=10911
+        namesrvAddr=rocketmq-namesrv:9876
+        deleteWhen=04
+        fileReservedTime=48
+        brokerRole=ASYNC_MASTER
+        flushDiskType=ASYNC_FLUSH
+      ' > /home/rocketmq/conf/broker.conf &&
+      sh mqbroker -n rocketmq-namesrv:9876 -c /home/rocketmq/conf/broker.conf"
+    ports:
+      - "10911:10911"  # Broker communication
+      - "10909:10909"  # Broker HA service
+
   bet-settlement-service:
     image: bookmaker/bet-settlement-service
     container_name: bet-settlement-service
     environment:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_ROCKETMQ_NAME-SERVER=rocketmq-namesrv:9876
     depends_on:
       - kafka
+      - rocketmq-namesrv
+      - rocketmq-broker
     ports:
       - "8080:8080"
-
