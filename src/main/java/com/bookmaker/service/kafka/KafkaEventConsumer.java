@@ -4,7 +4,6 @@ import com.bookmaker.model.EventOutcome;
 import com.bookmaker.repository.BetRepository;
 import com.bookmaker.model.Bet;
 import com.bookmaker.service.rocketmq.RocketMqSettlementProducer;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,15 +24,7 @@ public class KafkaEventConsumer {
 
         System.out.println("Event received!!!!!! id = " + eventOutcome.getEventId());
 
-        List<Bet> betsToSettle = betRepository.findAll();
-        if (betsToSettle.isEmpty()) {
-            System.out.println("No bets to settle for event: " + eventOutcome.getEventId());
-        }
-        for (Bet bet : betsToSettle) {
-            System.out.println("Bet to Settle: id = " + bet.getId() + " event id = " + bet.getEventId());
-        }
-
-        betsToSettle = betRepository.findByEventId(eventOutcome.getEventId());
+        List<Bet> betsToSettle = betRepository.findByEventId(eventOutcome.getEventId());
         for (Bet bet : betsToSettle) {
             System.out.println("Bet to Settle: " + bet.getId());
 
@@ -43,9 +34,6 @@ public class KafkaEventConsumer {
 
                 // Send bet settlement to RocketMQ - Real
                 rocketMqSettlementProducer.send(bet);
-
-                // Send bet settlement to RocketMQ - Mock
-//                rocketMqSettlementProducer.sendSettlementMessage(bet);
             }
         }
     }
