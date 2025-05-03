@@ -1,20 +1,24 @@
 package com.bookmaker.controller;
 
-import com.bookmaker.model.EventOutcome;
-import com.bookmaker.service.kafka.KafkaEventProducer;
+import com.bookmaker.model.dto.EventOutcome;
+import com.bookmaker.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/events")
 public class EventOutcomeController {
 
     @Autowired
-    private KafkaEventProducer kafkaEventProducer;
+    private EventService eventService;
 
     @PostMapping("/publish")
-    public String publishEventOutcome(@RequestBody EventOutcome eventOutcome) {
-        kafkaEventProducer.sendEventOutcome(eventOutcome);
-        return "Event Outcome Published";
+    public ResponseEntity<String> publishEventOutcome(@RequestBody EventOutcome eventOutcome) {
+        eventService.sendEventOutcome(eventOutcome);
+        return ResponseEntity.ok("Event processed successfully");
     }
 }

@@ -1,4 +1,4 @@
-package com.bookmaker.model;
+package com.bookmaker.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;

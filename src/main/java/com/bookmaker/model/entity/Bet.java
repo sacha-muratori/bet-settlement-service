@@ -1,9 +1,10 @@
-package com.bookmaker.model;
+package com.bookmaker.model.entity;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Getter
