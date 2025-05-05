@@ -11,6 +11,7 @@ allowing for easy future refactoring into separate services.
 The use of an in-memory H2 database simplifies persistence during development while still representing real-world storage interaction.   
 All infrastructure dependencies, including Kafka, RocketMQ, and the application itself, are managed within Docker Compose, 
 ensuring reproducibility and ease of setup.  
+Due to compatibility issues with the rocketmq-spring-boot-starter dependency, Spring was downgraded to 2.7.15 and Java to 17.
 
 ## Installation
 ### Pre-requisite
