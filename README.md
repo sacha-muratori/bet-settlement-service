@@ -39,7 +39,7 @@ In order to successfully test and execute the correct flow of the application, y
 
 **Request Format:**
 ```
-http://localhost:8080/api/events/publish"
+http://localhost:8080/api/events/publish
 ```
 with a raw json body as (for example):
 ```json
@@ -56,11 +56,17 @@ with a raw json body as (for example):
 ```
 
 ### Notes
-As part of this MVP, I’ve implemented a monolithic Spring Boot application for simplicity. In production, I would separate it into at least two services: one for the API/Kafka producer and another for the Kafka consumer/RocketMQ producer,
-enabling independent deployment, scalability, and failure isolation.  
-While this API uses Spring MVC, a reactive version with WebFlux could better support high-throughput scenarios.   
-Production setups would also benefit from resilience features like exponential backoff (e.g., Resilience4j) and rate limiting (e.g., Bucket4j).  
-Kafka and RocketMQ are used with default settings; tuning (e.g., partitions, compression, batching) would be essential for real-world loads.  
-Health checks are available via Spring Boot Actuator (/actuator/health). For observability, Prometheus integration is a logical next step.   
-Although end-to-end testing is out of scope here, tools like TestContainers and WireMock would be used in a full test strategy.   
-Configs and SQL files should ideally reside under a /release folder for clarity.  
+As part of this MVP, I implemented a monolithic Spring Boot application for simplicity.  
+In a production setup, I would split it into at least two services: one handling the API and Kafka producer, the other managing the Kafka consumer and RocketMQ producer. This separation enables independent development, deployment, scalability, and better failure isolation.  
+  
+Although this version uses Spring MVC, a reactive alternative with WebFlux could better support high-throughput use cases.  
+Production environments would also benefit from resilience mechanisms such as exponential backoff using Resilience4j, and rate limiting via tools like Bucket4j.  
+  
+Kafka and RocketMQ are currently used with default configurations. Tuning parameters, such as partitions, compression, and batching, would be critical for handling real-world traffic efficiently.  
+  
+Health checks are exposed via Spring Boot Actuator (/actuator/health).    
+For observability, Prometheus integration would be a natural next step.  
+  
+End-to-end testing was out of scope for this MVP, but in a full testing strategy, tools like TestContainers and WireMock would be incorporated.  
+  
+Configuration files and SQL scripts should ideally be organized under a /release directory for clarity and maintainability.  
