@@ -41,8 +41,3 @@ rocketmq:
   name-server: ${SPRING_ROCKETMQ_NAME-SERVER:rocketmq-namesrv:9876}
   producer:
     group: dev_group
-
-logging:
-  level:
-    root: DEBUG
-    org.springframework: DEBUG
