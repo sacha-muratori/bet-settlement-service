@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * REST controller for managing event outcomes.
+ * Provides an endpoint to publish event outcomes to the EventService.
+ */
 @RestController
 @RequestMapping("/api/events")
 public class EventOutcomeController {

@@ -6,6 +6,10 @@ import org.springframework.kafka.KafkaException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Global exception handler for the REST controllers (at the moment only for EventOutcomeController).
+ * Catches and handles specific exceptions like KafkaException and generic exceptions.
+ */
 @RestControllerAdvice
 public class RestControllerExceptionHandler {
 

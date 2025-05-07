@@ -17,7 +17,7 @@
     <!-- Loggers -->
     <Loggers>
         <!-- Logger for com.bookmaker package -->
-        <Logger name="com.bookmaker" level="INFO" additivity="false">
+        <Logger name="com.bookmaker" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
         </Logger>

@@ -7,6 +7,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service that delegates the publishing of event outcomes to the Kafka producer.
+ * Sits between the EventOutcomeController and the KafkaEventProducer.
+ */
 @Service
 public class EventService {
 

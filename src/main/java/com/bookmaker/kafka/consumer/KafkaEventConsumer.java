@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+/**
+ * Kafka consumer that listens for EventOutcome messages and triggers settlement processing.
+ */
 @Component
 public class KafkaEventConsumer {
 

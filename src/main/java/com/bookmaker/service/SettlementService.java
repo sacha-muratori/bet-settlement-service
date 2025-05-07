@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service responsible for processing event outcomes by retrieving related bets
+ * and sending them to RocketMQ for settlement.
+ * Sits between the KafkaEventConsumer and the RocketMqSettlementProducer.
+ */
 @Service
 public class SettlementService {
 

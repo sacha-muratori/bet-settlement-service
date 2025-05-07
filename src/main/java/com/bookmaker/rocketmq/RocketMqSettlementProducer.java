@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * RocketMQ producer responsible for sending Bet entities to the configured Rocket MQ topic for settlement processing.
+ */
 @Component
 public class RocketMqSettlementProducer {
 

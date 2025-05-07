@@ -10,6 +10,9 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+/**
+ * Kafka producer responsible for sending EventOutcome messages to the configured topic.
+ */
 @Component
 @EnableKafka
 public class KafkaEventProducer {
