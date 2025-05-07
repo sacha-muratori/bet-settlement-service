@@ -71,3 +71,4 @@ For observability, Prometheus integration would be a natural next step.
 End-to-end testing was out of scope for this MVP, but in a full testing strategy, tools like TestContainers and WireMock would be incorporated.  
   
 Configuration files and SQL scripts should ideally be organized under a /release directory for clarity and maintainability.  
+At the moment tests are run as part as the docker build. This can be optimized for CI/CD pipelines test reports.

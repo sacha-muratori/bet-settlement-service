@@ -23,6 +23,6 @@ public class EventOutcomeController {
     @PostMapping("/publish")
     public ResponseEntity<String> publishEventOutcome(@RequestBody EventOutcome eventOutcome) {
         eventService.sendEventOutcome(eventOutcome);
-        return ResponseEntity.ok("Event processed successfully");
+        return ResponseEntity.ok("Event processed successfully towards Kafka topic");
     }
 }
