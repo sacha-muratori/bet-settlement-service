@@ -3,7 +3,7 @@ A backend service simulating a sports event outcome handling and bet settlement 
 
 ## Design and Implementation
 The application is implemented using Spring Boot in a monolithic structure, exposing a REST API that accepts sports event outcomes 
-and publishes them to a Kafka topic (event-outcomes).  
+and publishes them to a Kafka topic (event-outcomes).
 A Kafka consumer within the same application listens to this topic and processes any bets from an in-memory H2 database that match the event.   
 Once matching bets are found, the application sends settlement messages to RocketMQ, which is fully configured and running as part of the docker-compose.yml environment.  
 The architecture cleanly separates concerns into components such as controllers, services, consumers, and producers, 
@@ -57,18 +57,18 @@ with a raw json body as (for example):
 ```
 
 ### Notes
-As part of this MVP, I implemented a monolithic Spring Boot application for simplicity.  
-In a production setup, I would split it into at least two services: one handling the API and Kafka producer, the other managing the Kafka consumer and RocketMQ producer. This separation enables independent development, deployment, scalability, and better failure isolation.  
-  
+As part of this MVP, I implemented a monolithic Spring Boot application for simplicity.
 Although this version uses Spring MVC, a reactive alternative with WebFlux could better support high-throughput use cases.  
-Production environments would also benefit from resilience mechanisms such as exponential backoff using Resilience4j, and rate limiting via tools like Bucket4j.  
-  
-Kafka and RocketMQ are currently used with default configurations. Tuning parameters, such as partitions, compression, and batching, would be critical for handling real-world traffic efficiently.  
-  
+Real APIs would also benefit from resilience mechanisms such as exponential backoff using Resilience4j, and rate limiting via tools like Bucket4j.
+
+In a production setup, I would split it into at least two services: one handling the API and Kafka producer, the other managing the Kafka consumer and RocketMQ producer. This separation enables independent development, deployment, scalability, and better failure isolation.
+Also, it would be beneficial to notify the user through the use of either an email notification, a polling mechanism towards another API waiting for the flow completion, or the listening of another kafka topic, in an event-driven SAGA pattern architecture.
+
+Kafka and RocketMQ are currently used with default configurations. 
+Tuning parameters, such as partitions, compression, and batching, would be critical for handling real-world traffic efficiently.
 Health checks are exposed via Spring Boot Actuator (/actuator/health).    
 For observability, Prometheus integration would be a natural next step.  
   
-End-to-end testing was out of scope for this MVP, but in a full testing strategy, tools like TestContainers and WireMock would be incorporated.  
-  
-Configuration files and SQL scripts should ideally be organized under a /release directory for clarity and maintainability.  
+End-to-end testing was out of scope for this MVP, but in a full testing strategy, tools like TestContainers and WireMock would be incorporated.
 At the moment tests are run as part as the docker build. This can be optimized for CI/CD pipelines test reports.
+Configuration files and SQL scripts should ideally be organized under a /release directory for clarity and maintainability.  
